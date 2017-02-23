@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box div{
+				width: 50px;
+				height: 50px;
+				border: 1px solid #000;
+				padding: 56px;
+				display: none;
+			}
+			#box .show{
+				display: block;
+			}
+			#box2 div{
+				width: 50px;
+				height: 50px;
+				border: 1px solid #000;
+				padding: 56px;
+				display: none;
+			}
+			#box2 .show{
+				display: block;
+			}
+			.active{
+				background-color: lawngreen;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<input type="button" name="" class="active" value="按钮1" />
+			<input type="button" name="" id="" value="按钮2" />
+			<input type="button" name="" id="" value="按钮3" />
+			<div class="show">内容1</div>
+			<div>内容2</div>
+			<div>内容3</div>
+		</div>
+		<div id="box2">
+			<input type="button" name="" class="active" value="按钮1" />
+			<input type="button" name="" id="" value="按钮2" />
+			<input type="button" name="" id="" value="按钮3" />
+			<div class="show">内容1</div>
+			<div>内容2</div>
+			<div>内容3</div>
+		</div>
+			<input type="button" name="" id="btn1" value="按钮一" />
+			<input type="button" name="" id="btn2" value="按钮二" />
+			<input type="button" name="" id="btn3" value="按钮三" />
+			<input type="button" name="" id="btn4" value="按钮四" />
+		<script type="text/javascript">
+			function Tab(id){
+				this.box = document.getElementById(id)
+				this.divs = this.box.getElementsByTagName('div');
+				this.btns = this.box.getElementsByTagName('input');
+				this.timer = null;
+				this.num = 0;
+				var _this = this;
+				for(var i = 0;i<this.btns.length;i++){
+					this.btns[i].index = i;
+					this.btns[i].addEventListener('click', function(){
+						that.num = this.index;
+						_this.clickFn(this.index);
+					})
+				}
+			}
+			Tab.prototype.clickFn = function(index){
+				for (var i = 0;i<this.btns.length;i++) {
+					this.btns[i].className = '';
+					this.divs[i].className = '';
+				}
+				this.btns[index].className = 'active';
+				this.divs[index].className = 'show';
+			}
+			Tab.prototype.play = function(){
+				clearInterval(this.timer)
+				var _this = this
+				this.timer = setInterval(function(){
+					_this.num++;
+					_this.clickFn(_this.num%=3)
+				},1000)
+			}
+			Tab.prototype.stop = function(){
+				clearInterval(this.timer);
+				this.timer = null;
+			}
+			Tab.prototype.isAutoPlay = function(){
+				return !!this.timer;
+			}
+			var tab = new Tab('box');
+			var tab1 = new Tab('box2');
+			tab.play();
+			var btn1 = document.getElementById("btn1")
+			var btn2 = document.getElementById("btn2")
+			var btn3 = document.getElementById("btn3")
+			var btn4 = document.getElementById("btn4")
+			
+			btn1.onclick = function(){
+				tab.stop();
+			}
+			btn2.onclick = function(){
+				tab.play();
+			}
+			btn3.onclick = function(){
+				tab1.play();
+			}
+			btn4.onclick = function(){
+				if(tab.isAutoPlay()){
+					tab.stop();
+				}else{
+					tab.play();
+				}
+				if(tab1.isAutoPlay()){
+					tab1.stop();
+				}else{
+					tab1.play();
+				}
+			}
+		</script>
+	</body>
+</html>

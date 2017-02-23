@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			#box,#box2{
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				left:0;
+				top:0;
+			}
+			#box{
+				background: red;
+			}
+			#box2{
+				background: blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+		<!--<div id="box2"></div>-->
+		<script type="text/javascript">
+		function Tab(obj){
+			this.box = document.getElementById(obj);
+			var _this = this
+			this.box.addEventListener('mousedown',function(ev){
+				_this.mousedown();
+			})
+		}
+		Tab.prototype.mousedown = function(ev){
+			var ev = event||ev;
+			var _this = this
+			ev.preventDefault();
+			this.box.disX = ev.clientX - this.box.getBoundingClientRect().left;
+			this.box.disY = ev.clientY - this.box.getBoundingClientRect().top;
+			document.addEventListener('mousemove',Move)
+			document.addEventListener('mouseup',Up)
+			function Move(ev){
+				_this.mousemove(ev);
+			}
+			function Up(ev){
+				_this.mouseups(ev,Move,Up);
+			}
+		}
+		Tab.prototype.mousemove = function(ev){
+			var ev = event||ev;
+			this.box.l = ev.clientX - this.box.disX;
+			this.box.t = ev.clientY - this.box.disY;
+			this.box.style.left = this.box.l + 'px';
+			this.box.style.top = this.box.t + 'px';
+		}
+		Tab.prototype.mouseups = function(ev,move,up){
+			document.removeEventListener('mousemove',move)
+			document.removeEventListener('mouseup',up)
+		}
+		var box = document.getElementById('box');
+		var box2 = document.getElementById('box2');
+		var t = new Tab('box');
+		
+		</script>
+	</body>
+</html>
